@@ -11,39 +11,41 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+    //Input matrix
     PatternMatrix* matrix = new PatternMatrix();
     matrix->load(argv[1]);
 
     TreeSearcher* searcher = new TreeSearcher();
     searcher->setMatrix(matrix);
+    cout << "Finished loading... " << endl;
+
+    //Input data tree
+    TFile* dataFile = new TFile(argv[2], "READ");
+    TTree* dataTree = (TTree*)dataFile->Get("save");
+
+    int uIDs[100];
+    dataTree->SetBranchAddress("uIDs", uIDs);
 
     //Dummy data
+    int nTracks = 0;
     DataMatrix data(19);
-    data.addHit(0);
-    data.addHit(1040);
-    data.addHit(2041);
-    data.addHit(3018);
-    data.addHit(4017);
-    data.addHit(5038);
-    data.addHit(6039);
-    data.addHit(7043);
-    data.addHit(8043);
-    data.addHit(9035);
-    data.addHit(10034);
-    data.addHit(11043);
-    data.addHit(12043);
-    data.addHit(13036);
-    data.addHit(14037);
-    data.addHit(15035);
-    data.addHit(16035);
-    data.addHit(17053);
-    data.addHit(18054);
+    for(int i = 0; i < dataTree->GetEntries(); ++i)
+    {
+        dataTree->GetEntry(i);
+        if(i % 100) cout << i << endl;
 
-    cout << "Start " << endl;
+        data.clear();
+        data.addHit(0);
+        for(int j = 0; j < 18; ++j)
+        {
+            int detectorID = uIDs[j]/1000;
+            if(detectorID > 18) uIDs[j] -= 5500;
+            data.addHit(uIDs[j]);
+        }
+        nTracks += searcher->setEvent(&data);
+        //searcher->printResults();
+    }
 
-    searcher->setEvent(&data);
-    searcher->printResults();
-
-
+    cout << nTracks << "  " << dataTree->GetEntries() << endl;
     return 0;
 }

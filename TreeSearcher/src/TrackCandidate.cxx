@@ -45,29 +45,27 @@ bool TrackCandidate::isValid()
         {
             nMissedHitsPerStation = 0;
             nMissedViewsPerStation = 0;
-            //idx_check = i+1;
         }
     }
 
-    std::cout << "--- Valid ---" << idx_check << "  " << nMissedHitsPerStation << "  " << nMissedViewsPerStation << "  " << nMissedViews << "  == ";
-
+    //std::cout << "--- Valid ---" << nMissedHitsPerStation << "  " << nMissedViewsPerStation << "  " << nMissedViews << "  == ";
     return true;
 }
 
 void TrackCandidate::push(int uID)
 {
-    std::cout << " Pushing " << uID << ", " << depth_curr << ",  " << nMissedHits_curr << ",  ";
+    //std::cout << " Pushing " << uID << ", " << depth_curr << ",  " << nMissedHits_curr << ",  ";
     uniqueIDs[depth_curr++] = uID;
     if(uID < 0) ++nMissedHits_curr;
-    std::cout << nMissedHits_curr << std::endl;
+    //std::cout << nMissedHits_curr << std::endl;
 }
 
 void TrackCandidate::pop()
 {
-    std::cout << " Poping " << uniqueIDs[depth_curr-1] << ", " << depth_curr << ",  " << nMissedHits_curr << ",  ";
+    //std::cout << " Poping " << uniqueIDs[depth_curr-1] << ", " << depth_curr << ",  " << nMissedHits_curr << ",  ";
     if(uniqueIDs[--depth_curr] < 0) --nMissedHits_curr;
     uniqueIDs[depth_curr] = 0;
-    std::cout << nMissedHits_curr << std::endl;
+    //std::cout << nMissedHits_curr << std::endl;
 }
 
 void TrackCandidate::clear()
@@ -93,7 +91,7 @@ TString TrackCandidate::getHashString()
 
 std::ostream& operator << (std::ostream& os, const TrackCandidate& cand)
 {
-    os << cand.depth_curr << "  " << cand.nMissedHits_curr << "  " << cand.idx_check << " : ";
+    os << cand.depth_curr << "  " << cand.nMissedHits_curr << " : ";
     for(int i = 0; i < cand.depth_curr; ++i) os << cand.uniqueIDs[i] << " = ";
 
     return os;

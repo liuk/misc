@@ -49,9 +49,6 @@ public:
     //! cache of the current missing hits
     int nMissedHits_curr;
 
-    //! starting index of quality check
-    int idx_check;
-
     //! container of all the hits associated
     std::vector<int> uniqueIDs;
 
