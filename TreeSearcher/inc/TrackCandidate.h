@@ -30,6 +30,15 @@ public:
     //! return the hash string
     TString getHashString();
 
+    //! get the number of valid hits
+    int getNHits() const { return depth_curr - nMissedHits_curr; }
+
+    //! operator to reduce similar candidates
+    bool simliarity(const TrackCandidate& cand) const;
+
+    //! operator for comparison
+    bool operator<(const TrackCandidate& cand) const;
+
     //!overidden streamer
     friend std::ostream& operator << (std::ostream& os, const TrackCandidate& cand);
 
